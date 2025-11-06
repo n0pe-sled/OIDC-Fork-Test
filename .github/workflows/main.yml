@@ -8,15 +8,6 @@ permissions:
   id-token: write
   contents: read
 
-name: Print OIDC Token (Alternative)
-
-on:
-  workflow_dispatch:
-
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   print-token:
     runs-on: ubuntu-latest
