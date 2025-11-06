@@ -57,7 +57,9 @@ jobs:
           role-to-assume: arn:aws:iam::851725637490:role/GithubActionsTest
           aws-region: us-east-1
 
-      - name: Verify AWS Identity
+      - name: Verify AWS Identity2
         run: |
           echo "✅ Legitimate workflow running from main branch"
           aws sts get-caller-identity
+
+      
