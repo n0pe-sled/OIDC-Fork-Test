@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Simple script to get AWS caller identity
-whoami
+aws sts get-caller-identity
